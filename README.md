@@ -63,6 +63,7 @@ All API endpoints are under `/api/`. Instance endpoints require an `X-Instance-T
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `POST` | `/api/instances/register` | Register with passphrase, receive token |
+| `GET` | `/api/instances/me` | Confirm token is valid, return instance info |
 
 ### Channels
 | Method | Endpoint | Description |

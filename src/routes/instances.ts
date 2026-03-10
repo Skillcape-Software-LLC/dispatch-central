@@ -4,6 +4,7 @@ import { getDb } from '../db/database.js';
 import { config } from '../config.js';
 import { safeEqual } from '../middleware/auth-utils.js';
 import { rateLimit } from '../middleware/rate-limit.js';
+import { instanceAuth } from '../middleware/auth.js';
 import { logActivity } from '../services/activity.js';
 
 const registerSchema = {
@@ -40,6 +41,20 @@ export async function instanceRoutes(fastify: FastifyInstance): Promise<void> {
       logActivity('register', token, null, { name });
 
       return reply.code(201).send({ token });
+    },
+  );
+
+  // GET /api/instances/me — Confirm token is valid, return instance info
+  fastify.get(
+    '/api/instances/me',
+    { preHandler: instanceAuth },
+    async (request, reply) => {
+      const instance = request.instanceRecord!;
+      return reply.send({
+        name: instance.name,
+        registeredAt: instance.registered_at,
+        lastSeenAt: instance.last_seen_at,
+      });
     },
   );
 }
