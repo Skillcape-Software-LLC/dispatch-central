@@ -27,9 +27,11 @@ Dispatch Central uses a lightweight, token-based security model with no traditio
 echo "PASSPHRASE=your-secret-passphrase" > .env
 echo "ADMIN_TOKEN=your-admin-token" >> .env
 
-# Start the server
+# Pull and start the server
 docker compose up -d
 ```
+
+The image is published to `ghcr.io/skillcape-software-llc/dispatch-central`.
 
 The server runs at `http://localhost:3001`. The admin dashboard is at `http://localhost:3001/admin`.
 

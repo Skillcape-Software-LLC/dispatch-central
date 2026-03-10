@@ -1,6 +1,6 @@
 services:
   dispatch-central:
-    build: .
+    image: ghcr.io/skillcape-software-llc/dispatch-central:latest
     ports:
       - "3001:3001"
     environment:
