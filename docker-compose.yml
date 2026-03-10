@@ -1,0 +1,17 @@
+services:
+  dispatch-central:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      - PASSPHRASE=${PASSPHRASE:?PASSPHRASE is required}
+      - ADMIN_TOKEN=${ADMIN_TOKEN:?ADMIN_TOKEN is required}
+      - PORT=3001
+      - DATA_DIR=/data
+      - LOG_LEVEL=info
+    volumes:
+      - central-data:/data
+    restart: unless-stopped
+
+volumes:
+  central-data:
