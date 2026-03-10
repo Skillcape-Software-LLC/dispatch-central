@@ -3,10 +3,13 @@ import path from 'path';
 import { FastifyInstance } from 'fastify';
 import { adminAuth } from '../middleware/admin-auth.js';
 import { validateIdParam, validateTokenParam } from '../middleware/validate-uuid.js';
+import { rateLimit } from '../middleware/rate-limit.js';
 import { config } from '../config.js';
 import { getDb } from '../db/database.js';
 
 export async function adminRoutes(fastify: FastifyInstance): Promise<void> {
+  // Rate limit all admin endpoints — 30 requests per minute per IP
+  fastify.addHook('preHandler', rateLimit({ prefix: 'admin', maxAttempts: 30, windowMs: 60_000 }));
   // GET /api/admin/dashboard — Overview stats
   fastify.get(
     '/api/admin/dashboard',

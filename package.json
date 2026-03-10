@@ -5,9 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
+    "dev:local": "cross-env ADMIN_TOKEN=secret PASSPHRASE=secret DATA_DIR=./data tsx watch src/index.ts",
     "build": "tsc && npm run postbuild",
     "postbuild": "cp -r src/db/migrations dist/db/migrations && cp -r src/admin dist/admin",
-    "start": "node dist/index.js",
+    "start:dist": "node dist/index.js",
+    "start": "cross-env ADMIN_TOKEN=secret PASSPHRASE=secret DATA_DIR=./data node dist/index.js",
     "test": "cross-env PASSPHRASE=test-passphrase ADMIN_TOKEN=test-admin-token LOG_LEVEL=silent node --import tsx/esm --test src/test/*.test.ts"
   },
   "dependencies": {

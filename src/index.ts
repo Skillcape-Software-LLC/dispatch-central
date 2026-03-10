@@ -72,12 +72,16 @@ async function bootstrap(): Promise<void> {
 
   // Serve admin UI static files
   await fastify.register(fastifyStatic, {
-    root: path.join(__dirname, 'admin', 'dist'),
+    root: path.join(__dirname, 'admin', 'static'),
     prefix: '/admin/',
     decorateReply: false,
   });
 
-  // Redirect /admin to /admin/
+  // Redirect / and /admin to /admin/
+  fastify.get('/', async (_request, reply) => {
+    return reply.redirect('/admin/');
+  });
+
   fastify.get('/admin', async (_request, reply) => {
     return reply.redirect('/admin/');
   });
