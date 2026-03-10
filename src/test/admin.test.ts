@@ -107,6 +107,41 @@ describe('Admin API', () => {
     }
   });
 
+  it('reassigns channel ownership', async () => {
+    const newOwner = await registerInstance(app, 'new-owner-instance');
+    const tempChannel = await publishChannel(app, instanceToken);
+
+    const res = await app.inject({
+      method: 'PATCH',
+      url: `/api/admin/channels/${tempChannel}/owner`,
+      headers: { 'x-admin-token': TEST_ADMIN_TOKEN },
+      payload: { ownerToken: newOwner },
+    });
+    assert.equal(res.statusCode, 200);
+
+    // Verify ownership changed
+    const channels = await app.inject({
+      method: 'GET',
+      url: '/api/admin/channels',
+      headers: { 'x-admin-token': TEST_ADMIN_TOKEN },
+    });
+    const body = JSON.parse(channels.payload);
+    const ch = body.find((c: any) => c.id === tempChannel);
+    assert.equal(ch.ownerToken, newOwner);
+  });
+
+  it('rejects reassign to non-existent instance', async () => {
+    const res = await app.inject({
+      method: 'PATCH',
+      url: `/api/admin/channels/${channelId}/owner`,
+      headers: { 'x-admin-token': TEST_ADMIN_TOKEN },
+      payload: { ownerToken: '00000000-0000-0000-0000-000000000000' },
+    });
+    assert.equal(res.statusCode, 404);
+    const body = JSON.parse(res.payload);
+    assert.equal(body.message, 'Target instance not found.');
+  });
+
   it('force-deletes a channel', async () => {
     const tempChannel = await publishChannel(app, instanceToken);
     const res = await app.inject({

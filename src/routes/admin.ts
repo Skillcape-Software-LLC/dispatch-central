@@ -161,6 +161,36 @@ export async function adminRoutes(fastify: FastifyInstance): Promise<void> {
     },
   );
 
+  // PATCH /api/admin/channels/:id/owner — Reassign channel ownership
+  fastify.patch(
+    '/api/admin/channels/:id/owner',
+    { preHandler: [validateIdParam, adminAuth] },
+    async (request, reply) => {
+      const { id } = request.params as { id: string };
+      const { ownerToken } = request.body as { ownerToken?: string };
+
+      if (!ownerToken || typeof ownerToken !== 'string') {
+        return reply.code(400).send({ error: 'BadRequest', message: 'ownerToken is required.' });
+      }
+
+      const db = getDb();
+
+      const channel = db.prepare('SELECT 1 FROM channels WHERE id = ?').get(id);
+      if (!channel) {
+        return reply.code(404).send({ error: 'NotFound', message: 'Channel not found.' });
+      }
+
+      const instance = db.prepare('SELECT 1 FROM instances WHERE token = ?').get(ownerToken);
+      if (!instance) {
+        return reply.code(404).send({ error: 'NotFound', message: 'Target instance not found.' });
+      }
+
+      db.prepare('UPDATE channels SET owner_token = ? WHERE id = ?').run(ownerToken, id);
+
+      return reply.code(200).send({ message: 'Ownership reassigned.' });
+    },
+  );
+
   // DELETE /api/admin/channels/:id — Force-delete a channel
   fastify.delete(
     '/api/admin/channels/:id',
