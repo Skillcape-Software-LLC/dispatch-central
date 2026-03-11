@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"C:\\\\Users\\\\chad\\\\Repos\\\\Skillcape Software\\\\dispatch-central\" && npm install)",
+      "Bash(cd \"C:\\\\Users\\\\chad\\\\Repos\\\\Skillcape Software\\\\dispatch-central\" && npm run build)",
+      "Bash(cd \"C:\\\\Users\\\\chad\\\\Repos\\\\Skillcape Software\\\\dispatch-central\" && sqlite3 ./data/dispatch-central.db \".tables\")",
+      "Bash(cd \"C:\\\\Users\\\\chad\\\\Repos\\\\Skillcape Software\\\\dispatch-central\" && node -e \"\nconst Database = require\\('better-sqlite3'\\);\nconst db = new Database\\('./data/dispatch-central.db'\\);\nconst tables = db.prepare\\(\\\\\"SELECT name FROM sqlite_master WHERE type='table' ORDER BY name\\\\\"\\).all\\(\\);\nconsole.log\\(tables.map\\(t => t.name\\).join\\(', '\\)\\);\ndb.close\\(\\);\n\")",
+      "Bash(pkill -f \"tsx watch\" 2>/dev/null; echo \"done\")",
+      "Bash(cd \"C:\\\\Users\\\\chad\\\\Repos\\\\Skillcape Software\\\\dispatch-central\" && npm run build 2>&1)",
+      "Bash(cd \"/c/Users/chad/Repos/Skillcape Software/dispatch-central\" && npm run build 2>&1)",
+      "Bash(cd \"/c/Users/chad/Repos/Skillcape Software/dispatch-central\" && npm ls @fastify/static 2>&1 | head -5)",
+      "Bash(cd \"/c/Users/chad/Repos/Skillcape Software/dispatch-central\" && npm test 2>&1)",
+      "Bash(cd \"/c/Users/chad/Repos/Skillcape Software/dispatch-central\" && npm install --save-dev cross-env 2>&1)",
+      "Bash(cd \"C:\\\\Users\\\\chad\\\\Repos\\\\Skillcape Software\\\\dispatch-central\" && npm test 2>&1)",
+      "Bash(cd \"C:/Users/chad/Repos/Skillcape Software/dispatch-central\" && mv src/admin/dist src/admin/static)"
+    ]
+  }
+}
